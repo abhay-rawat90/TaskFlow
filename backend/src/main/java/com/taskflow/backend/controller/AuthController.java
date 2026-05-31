@@ -64,13 +64,16 @@ public class AuthController {
                     .compact();
 
             // 2. Create the HttpOnly Cookie
-            Cookie cookie = new Cookie("AUTH_TOKEN", token);
-            cookie.setHttpOnly(true); // JavaScript CANNOT read this! Prevents XSS attacks.
-            cookie.setPath("/");
-            cookie.setMaxAge(24 * 60 * 60); // Expires in 1 day
+            ResponseCookie springCookie = ResponseCookie.from("AUTH_TOKEN", token)
+                    .httpOnly(true)
+                    .secure(isProduction) // Will be true on Render (HTTPS)
+                    .path("/")
+                    .maxAge(24 * 60 * 60)
+                    .sameSite(isProduction ? "None" : "Lax") // <-- THE CRUCIAL FIX
+                    .build();
 
             // 3. Attach cookie to the HTTP response
-            response.addCookie(cookie);
+            response.addCookie(springCookie);
 
             return ResponseEntity.ok("Login successful");
         }
@@ -83,10 +86,10 @@ public class AuthController {
         // Create an identical cookie but set its Max-Age to 0 seconds to instantly destroy it
         ResponseCookie deleteCookie = ResponseCookie.from("AUTH_TOKEN", "")
                 .httpOnly(true)
-                .secure(false)
+                .secure(isProduction)
                 .path("/")
-                .maxAge(0)
-                .sameSite("Lax")
+                .maxAge(0) 
+                .sameSite(isProduction ? "None" : "Lax") // <-- THE CRUCIAL FIX
                 .build();
 
         response.setHeader(HttpHeaders.SET_COOKIE, deleteCookie.toString());
