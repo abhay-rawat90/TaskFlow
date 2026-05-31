@@ -5,8 +5,9 @@ import com.taskflow.backend.model.User;
 import com.taskflow.backend.repository.UserRepository;
 import dev.paseto.jpaseto.Pasetos;
 import dev.paseto.jpaseto.lang.Keys;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.security.Principal;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,10 +15,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import javax.crypto.SecretKey;
-import java.security.Principal;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -72,8 +69,9 @@ public class AuthController {
                     .sameSite(isProduction ? "None" : "Lax") // <-- THE CRUCIAL FIX
                     .build();
 
-            // 3. Attach cookie to the HTTP response
-            response.addCookie(springCookie);
+        
+            response.addHeader(HttpHeaders.SET_COOKIE, springCookie.toString());
+
 
             return ResponseEntity.ok("Login successful");
         }
