@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# Compiled local Maven files (Crucial for build speed)
+target/
+*.jar
+*.war
+*.class
+
+# Security: Never bake local secrets into the Docker image
+.env
+.env.*
+
+# IDE Files
+.idea/
+*.iml
+.vscode/
+*.swp
+
+# Miscellaneous
+HELP.md
+README.md
