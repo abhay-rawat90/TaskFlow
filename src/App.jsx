@@ -10,7 +10,7 @@ function App() {
     // Check if the user has a valid cookie the moment the app loads
     const verifySession = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/auth/me", {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/me`, {
           method: "GET",
           credentials: "include" // Send the hidden HttpOnly cookie to the server
         });

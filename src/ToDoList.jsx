@@ -12,7 +12,7 @@ function ToDoList({ onLogout }) {
     const [newTask, setNewTask] = useState("");
     
     // Connects directly to your Spring Boot server
-    const API_URL = "http://localhost:8080/api/tasks";
+    const API_URL = `${import.meta.env.VITE_API_BASE_URL}/api/tasks`;
 
     // Fetch tasks when the component loads
     useEffect(() => {
@@ -102,13 +102,13 @@ function ToDoList({ onLogout }) {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/auth/logout", {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/logout`, {
                 method: "POST",
                 credentials: "include"
             });
             
             if (response.ok) {
-                onLogout(); // Tell App.jsx to show the login screen
+                onLogout(); 
             }
         } catch (error) {
             console.error("Failed to log out:", error);

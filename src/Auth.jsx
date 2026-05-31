@@ -14,7 +14,7 @@ function Auth({ onLoginSuccess }) {
         setIsLoading(true);
 
         const endpoint = isLogin ? "/api/auth/login" : "/api/auth/register";
-        const url = `http://localhost:8080${endpoint}`;
+        const url = `${import.meta.env.VITE_API_BASE_URL}${endpoint}`;
 
         try {
             const response = await fetch(url, {
